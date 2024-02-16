@@ -1,0 +1,64 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      lint:
+        type: boolean
+        description: 'Run lint'
+        required: false
+        default: false
+      test:
+        type: boolean
+        description: 'Run test'
+        required: false
+        default: false
+      node-version:
+        type: string
+        description: 'Node.js version'
+        required: false
+        default: '20'
+      yarn-berry:
+        type: boolean
+        description: 'Force Use Yarn Berry'
+        required: false
+        default: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+        with:
+          node-version: ${{ inputs.node-version }}
+          yarn-berry: ${{ inputs.yarn-berry }}
+
+      - name: Build
+        run: yarn build
+
+  lint:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.lint }}
+    steps:
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+        with:
+          node-version: ${{ inputs.node-version }}
+          yarn-berry: ${{ inputs.yarn-berry }}
+
+      - name: Lint
+        run: yarn lint
+
+  test:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.test }}
+    steps:
+      - name: Setup Workspace
+        uses: ./.github/actions/setup-workspace
+        with:
+          node-version: ${{ inputs.node-version }}
+          yarn-berry: ${{ inputs.yarn-berry }}
+
+      - name: Test
+        run: yarn test

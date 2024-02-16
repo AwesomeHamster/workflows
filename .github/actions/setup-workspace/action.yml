@@ -1,0 +1,40 @@
+name: Setup Workspace
+author: Maiko Tan
+description: 'Setup workspace for building our project'
+inputs:
+  node-version:
+    type: string
+    description: 'Node.js version'
+    required: true
+    default: '20'
+  yarn-berry:
+    type: boolean
+    description: 'Force Use Yarn Berry'
+    required: false
+    default: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Use Yarn Berry
+      if: ${{ inputs.yarn-berry }}
+      run: |
+        # Test if current yarn version is 1.x
+        if [[ $(yarn --version) == 1.* ]]; then
+          echo "Installing Yarn Berry..."
+          yarn set version berry
+        else
+          echo "Yarn Berry is already installed"
+        fi
+
+    - name: Install Dependencies
+      run: |
+        yarn

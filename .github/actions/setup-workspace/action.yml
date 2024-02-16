@@ -26,6 +26,7 @@ runs:
 
     - name: Use Yarn Berry
       if: ${{ inputs.yarn-berry }}
+      shell: bash
       run: |
         # Test if current yarn version is 1.x
         if [[ $(yarn --version) == 1.* ]]; then
@@ -36,5 +37,6 @@ runs:
         fi
 
     - name: Install Dependencies
+      shell: bash
       run: |
         yarn

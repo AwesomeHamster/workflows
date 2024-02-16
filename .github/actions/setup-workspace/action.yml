@@ -12,6 +12,11 @@ inputs:
     description: 'Force Use Yarn Berry'
     required: false
     default: false
+  yarn-immutable:
+    type: boolean
+    description: 'Enable Yarn Immutable'
+    required: false
+    default: true
 
 runs:
   using: 'composite'
@@ -38,5 +43,7 @@ runs:
 
     - name: Install Dependencies
       shell: bash
+      env:
+        YARN_ENABLE_IMMUTABLE_INSTALLS: ${{ inputs.yarn-immutable }}
       run: |
         yarn

@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Workspace
-        uses: ./.github/actions/setup-workspace
+        uses: AwesomeHamster/workflows/.github/actions/setup-workspace
         with:
           node-version: ${{ inputs.node-version }}
           yarn-berry: ${{ inputs.yarn-berry }}
@@ -42,7 +42,7 @@ jobs:
     if: ${{ inputs.lint }}
     steps:
       - name: Setup Workspace
-        uses: ./.github/actions/setup-workspace
+        uses: AwesomeHamster/workflows/.github/actions/setup-workspace
         with:
           node-version: ${{ inputs.node-version }}
           yarn-berry: ${{ inputs.yarn-berry }}
@@ -55,7 +55,7 @@ jobs:
     if: ${{ inputs.test }}
     steps:
       - name: Setup Workspace
-        uses: ./.github/actions/setup-workspace
+        uses: AwesomeHamster/workflows/.github/actions/setup-workspace
         with:
           node-version: ${{ inputs.node-version }}
           yarn-berry: ${{ inputs.yarn-berry }}

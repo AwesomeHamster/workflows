@@ -12,11 +12,11 @@ inputs:
     description: 'Force Use Yarn Berry'
     required: false
     default: false
-  yarn-immutable:
+  yarn-no-immutable:
     type: boolean
-    description: 'Enable Yarn Immutable'
+    description: 'Disable Yarn Immutable'
     required: false
-    default: true
+    default: false
 
 runs:
   using: 'composite'
@@ -30,6 +30,7 @@ runs:
         node-version: ${{ inputs.node-version }}
 
     - name: Use Yarn Berry
+      id: yarn-berry
       if: ${{ inputs.yarn-berry }}
       shell: bash
       run: |
@@ -40,10 +41,18 @@ runs:
         else
           echo "Yarn Berry is already installed"
         fi
+        echo "ENSURE_YARN_BERRY=true" >> $GITHUB_ENV
+
+    - name: Check Immutable Installs
+      if: ${{ inputs.yarn-no-immutable }}
+      shell: bash
+      run: |
+        if [[ $ENSURE_YARN_BERRY == true ]]; then
+          yarn config set enableImmutableInstalls false
+        fi
+        echo "YARN_ENABLE_IMMUTABLE_INSTALLS=false" >> $GITHUB_ENV
 
     - name: Install Dependencies
       shell: bash
-      env:
-        YARN_ENABLE_IMMUTABLE_INSTALLS: ${{ inputs.yarn-immutable }}
       run: |
         yarn

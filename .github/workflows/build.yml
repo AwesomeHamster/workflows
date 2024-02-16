@@ -23,11 +23,11 @@ on:
         description: 'Force Use Yarn Berry'
         required: false
         default: false
-      yarn-immutable:
+      yarn-no-immutable:
         type: boolean
-        description: 'Enable Yarn Immutable'
+        description: 'Disable Yarn Immutable'
         required: false
-        default: true
+        default: false
 
 jobs:
   build:
@@ -38,7 +38,7 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
           yarn-berry: ${{ inputs.yarn-berry }}
-          yarn-immutable: ${{ inputs.yarn-immutable }}
+          yarn-no-immutable: ${{ inputs.yarn-no-immutable }}
 
       - name: Build
         run: yarn build
@@ -52,7 +52,7 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
           yarn-berry: ${{ inputs.yarn-berry }}
-          yarn-immutable: ${{ inputs.yarn-immutable }}
+          yarn-no-immutable: ${{ inputs.yarn-no-immutable }}
 
       - name: Lint
         run: yarn lint
@@ -66,7 +66,7 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
           yarn-berry: ${{ inputs.yarn-berry }}
-          yarn-immutable: ${{ inputs.yarn-immutable }}
+          yarn-no-immutable: ${{ inputs.yarn-no-immutable }}
 
       - name: Test
         run: yarn test

@@ -17,6 +17,11 @@ inputs:
     description: 'Disable Yarn Immutable'
     required: false
     default: false
+  yarn-pnp:
+    type: boolean
+    description: 'Use Yarn PnP'
+    required: false
+    default: false
 
 runs:
   using: 'composite'
@@ -51,6 +56,12 @@ runs:
           yarn config set enableImmutableInstalls false
         fi
         echo "YARN_ENABLE_IMMUTABLE_INSTALLS=false" >> $GITHUB_ENV
+
+    - name: Use Yarn PnP
+      if: ${{ inputs.yarn-pnp && inputs.yarn-berry }}
+      shell: bash
+      run: |
+        yarn config nodeLinker ${{ inputs.yarn-pnp ? 'pnp' : 'node-modules' }}
 
     - name: Install Dependencies
       shell: bash

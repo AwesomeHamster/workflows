@@ -28,6 +28,11 @@ on:
         description: 'Disable Yarn Immutable'
         required: false
         default: false
+      yarn-pnp:
+        type: boolean
+        description: 'Use Yarn PnP'
+        required: false
+        default: false
 
 jobs:
   build:
@@ -39,6 +44,7 @@ jobs:
           node-version: ${{ inputs.node-version }}
           yarn-berry: ${{ inputs.yarn-berry }}
           yarn-no-immutable: ${{ inputs.yarn-no-immutable }}
+          yarn-pnp: ${{ inputs.yarn-pnp }}
 
       - name: Build
         run: yarn build
@@ -53,6 +59,7 @@ jobs:
           node-version: ${{ inputs.node-version }}
           yarn-berry: ${{ inputs.yarn-berry }}
           yarn-no-immutable: ${{ inputs.yarn-no-immutable }}
+          yarn-pnp: ${{ inputs.yarn-pnp }}
 
       - name: Lint
         run: yarn lint
@@ -67,6 +74,7 @@ jobs:
           node-version: ${{ inputs.node-version }}
           yarn-berry: ${{ inputs.yarn-berry }}
           yarn-no-immutable: ${{ inputs.yarn-no-immutable }}
+          yarn-pnp: ${{ inputs.yarn-pnp }}
 
       - name: Test
         run: yarn test

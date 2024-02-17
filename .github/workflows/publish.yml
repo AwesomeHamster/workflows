@@ -1,0 +1,77 @@
+name: Publish To NPM
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        type: string
+        description: 'Node.js version'
+        required: false
+        default: '20'
+      yarn-berry:
+        type: boolean
+        description: 'Force Use Yarn Berry'
+        required: false
+        default: false
+      yarn-no-immutable:
+        type: boolean
+        description: 'Disable Yarn Immutable'
+        required: false
+        default: false
+      yarn-pnp:
+        type: boolean
+        description: 'Use Yarn PnP'
+        required: false
+        default: false
+      npm-token:
+        type: string
+        required: true
+        description: NPM token
+      test-before-publish:
+        type: boolean
+        description: 'Run test before publish'
+        required: false
+        default: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Workspace
+        uses: AwesomeHamster/workflows/.github/actions/setup-workspace@master
+        with:
+          node-version: ${{ inputs.node-version }}
+          yarn-berry: ${{ inputs.yarn-berry }}
+          yarn-no-immutable: ${{ inputs.yarn-no-immutable }}
+          yarn-pnp: ${{ inputs.yarn-pnp }}
+
+      - name: Build
+        shell: bash
+        run: yarn build
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Setup Workspace
+        uses: AwesomeHamster/workflows/.github/actions/setup-workspace@master
+        with:
+          node-version: ${{ inputs.node-version }}
+          yarn-berry: ${{ inputs.yarn-berry }}
+          yarn-no-immutable: ${{ inputs.yarn-no-immutable }}
+          yarn-pnp: ${{ inputs.yarn-pnp }}
+
+      - name: Build
+        shell: bash
+        run: yarn build
+
+      - name: Test
+        if: ${{ inputs.test-before-publish }}
+        shell: bash
+        run: |
+          yarn test
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ inputs.npm-token }}

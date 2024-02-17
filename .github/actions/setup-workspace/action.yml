@@ -61,7 +61,7 @@ runs:
       if: ${{ inputs.yarn-pnp && inputs.yarn-berry }}
       shell: bash
       run: |
-        yarn config nodeLinker ${{ inputs.yarn-pnp ? 'pnp' : 'node-modules' }}
+        yarn config nodeLinker ${{ inputs.yarn-pnp && 'pnp' || 'node-modules' }}
 
     - name: Install Dependencies
       shell: bash

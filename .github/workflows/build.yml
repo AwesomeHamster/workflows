@@ -96,5 +96,5 @@ jobs:
     steps:
       - uses: hmarr/auto-approve-action@v4
         with:
-          review-message: ${{ inputs.review-message || 'You have passed all checks, good job! :hooray:' }}
+          review-message: ${{ inputs.review-message || '🎉 You have passed all checks, good job! 🎉' }}
           pull-request-number: ${{ github.event.number }}

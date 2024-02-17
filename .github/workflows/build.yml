@@ -13,6 +13,16 @@ on:
         description: 'Run test'
         required: false
         default: false
+      approve:
+        type: boolean
+        description: 'Approve pull request if all jobs are successful'
+        required: false
+        default: false
+      review-message:
+        type: string
+        description: 'Review message for auto approve'
+        required: false
+        default: ''
       node-version:
         type: string
         description: 'Node.js version'
@@ -33,6 +43,10 @@ on:
         description: 'Use Yarn PnP'
         required: false
         default: false
+    secrets:
+      github-token:
+        required: false
+        description: 'GitHub Token for auto approve'
 
 jobs:
   build:
@@ -78,3 +92,14 @@ jobs:
 
       - name: Test
         run: yarn test
+
+  approve:
+    runs-on: ubuntu-latest
+    needs: [build, lint, test]
+    if: ${{ github.event.issue.number && inputs.approve }}
+    steps:
+      - uses: hmarr/auto-approve-action@v4
+        with:
+          github-token: ${{ secrets.github-token }}
+          review-message: ${{ inputs.review-message || 'You have passed all checks, good job! :hooray:' }}
+          pull-request-number: ${{ github.event.issue.number }}

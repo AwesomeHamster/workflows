@@ -66,6 +66,7 @@ jobs:
       - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.npm-token }}
+          provenance: true
 
   deploy:
     runs-on: ubuntu-latest

@@ -32,27 +32,15 @@ on:
         description: 'Run test before publish'
         required: false
         default: false
+      deploy-to-ghpages:
+        type: boolean
+        description: 'Deploy documents to GitHub Pages'
+        required: false
+        default: false
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Setup Workspace
-        uses: AwesomeHamster/workflows/.github/actions/setup-workspace@master
-        with:
-          node-version: ${{ inputs.node-version }}
-          yarn-berry: ${{ inputs.yarn-berry }}
-          yarn-no-immutable: ${{ inputs.yarn-no-immutable }}
-          yarn-pnp: ${{ inputs.yarn-pnp }}
-
-      - name: Build
-        shell: bash
-        run: yarn build
-
   publish:
     runs-on: ubuntu-latest
-    needs: [build]
     steps:
       - name: Setup Workspace
         uses: AwesomeHamster/workflows/.github/actions/setup-workspace@master
@@ -75,3 +63,22 @@ jobs:
       - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ inputs.npm-token }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.deploy-to-ghpages }}
+
+    steps:
+      - name: Setup Workspace
+        uses: AwesomeHamster/workflows/.github/actions/setup-workspace@master
+        with:
+          node-version: ${{ inputs.node-version }}
+          yarn-berry: ${{ inputs.yarn-berry }}
+          yarn-no-immutable: ${{ inputs.yarn-no-immutable }}
+          yarn-pnp: ${{ inputs.yarn-pnp }}
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs

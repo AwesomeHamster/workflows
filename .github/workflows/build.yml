@@ -59,6 +59,13 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Upload Artifact
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.ref }}
+          path: './'
+          retention-days: 1
+
   lint:
     runs-on: ubuntu-latest
     if: ${{ inputs.lint }}

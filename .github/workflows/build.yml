@@ -62,8 +62,11 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.sha }}
-          path: './'
+          name: build
+          path: |
+            ./
+            !node_modules/
+            !.yarn/
           retention-days: 1
 
   lint:
